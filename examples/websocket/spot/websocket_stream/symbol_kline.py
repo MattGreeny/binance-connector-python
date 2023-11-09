@@ -9,18 +9,14 @@ config_logging(logging, logging.DEBUG)
 
 
 def message_handler(_, message):
-    print(message)
-
-
-def on_close(_):
-    print("CLOSED")
+    logging.info(message)
 
 
 my_client = SpotWebsocketStreamClient(
     on_message=message_handler,
-    on_close=on_close,
     is_combined=True,
-    timeout=None
+    timeout=2,
+    proxies={"https": "http://1.2.3.4:8080"},
 )
 
 
@@ -43,5 +39,3 @@ time.sleep(5)
 
 logging.debug("closing ws connection")
 my_client.stop()
-
-time.sleep(20)
